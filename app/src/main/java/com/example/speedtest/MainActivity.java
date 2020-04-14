@@ -1,10 +1,10 @@
 package com.example.speedtest;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+
 
 public class MainActivity extends Activity {
     public static TextView tv;
