@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+
+
 public class MyIntentService extends IntentService {
 
     private final int progressMax = 100;
