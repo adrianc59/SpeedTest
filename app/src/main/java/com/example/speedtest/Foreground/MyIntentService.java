@@ -1,4 +1,4 @@
-package com.example.speedtest;
+package com.example.speedtest.Foreground;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -8,16 +8,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.speedtest.Job.ExampleJobIntentService;
+import com.example.speedtest.R;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
-
 
 public class MyIntentService extends IntentService {
 
