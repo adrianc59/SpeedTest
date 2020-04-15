@@ -19,6 +19,7 @@ import java.net.URLConnection;
 
 public class MyIntentService extends IntentService {
 
+    private final int progressMax = 100;
     private static String file_url = "http://ipv4.download.thinkbroadband.com/5MB.zip";
     private String rateValue;
 
@@ -28,8 +29,8 @@ public class MyIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Notification notification = startMyOwnForeground();
-        startForeground(1, notification);
+        NotificationCompat.Builder notification = startMyOwnForeground();
+        startForeground(1, notification.build());
 
         int count;
         try {
@@ -53,9 +54,10 @@ public class MyIntentService extends IntentService {
 
             while ((count = input.read(data)) != -1) {
                 total += count;
-                // publishing the progress....
-                // After this onProgressUpdate will be called
-                //publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+                int progress = (int) ((total * 100) / lenghtOfFile);
+                notification.setProgress(progressMax, progress, false);
+                notification.setContentText(progress + "%");
+                startForeground(1, notification.build());
             }
 
             long endTime = System.currentTimeMillis(); //maybe
@@ -88,23 +90,23 @@ public class MyIntentService extends IntentService {
         return super.onStartCommand(intent,flags,startId);
     }
 
-    private Notification startMyOwnForeground(){
+    private NotificationCompat.Builder startMyOwnForeground(){
         String NOTIFICATION_CHANNEL_ID = "com.example.speedtest";
         String channelName = "My Background Service";
         NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         chan.setLightColor(Color.BLUE);
-        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         assert manager != null;
         manager.createNotificationChannel(chan);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        Notification notification = notificationBuilder.setOngoing(true)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("App is running in background")
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Calculating Download Speed")
+                .setContentText("0%")
+                .setOnlyAlertOnce(true)
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .build();
+                .setProgress(progressMax, 0, false)
+                .setCategory(Notification.CATEGORY_SERVICE);
 
         return notification;
     }
