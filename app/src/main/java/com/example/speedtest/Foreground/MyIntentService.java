@@ -8,12 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.speedtest.Job.ExampleJobIntentService;
 import com.example.speedtest.R;
 
 import java.io.BufferedInputStream;
@@ -44,13 +42,9 @@ public class MyIntentService extends IntentService {
             URLConnection conection = url.openConnection();
             conection.connect();
 
-            // this will be useful so that you can show a tipical 0-100%
-            // progress bar
             int lenghtOfFile = conection.getContentLength();
 
-            // download the file
-            InputStream input = new BufferedInputStream(url.openStream(),
-                    8192);
+            InputStream input = new BufferedInputStream(url.openStream(),8192);
 
             byte data[] = new byte[1024];
 

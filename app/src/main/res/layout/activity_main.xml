@@ -27,6 +27,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text"
-        android:onClick="enqueueWork"/>
+        android:onClick="speedCheck"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
