@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.speedtest.Job.JobIntentService;
@@ -26,12 +27,15 @@ public class DownloadImages extends AppCompatActivity {
     private Button image4;
 
     private Intent serviceIntent;
+    private int jobCount = 0;
+    private TextView jobCountView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_images);
 
+        jobCountView = findViewById(R.id.jobCountView);
         image1 = findViewById(R.id.image1);
         image2 = findViewById(R.id.image2);
         image3 = findViewById(R.id.image3);
@@ -50,6 +54,9 @@ public class DownloadImages extends AppCompatActivity {
     private void imageClick(String imageName) {
         Toast.makeText(this, "YAY", Toast.LENGTH_SHORT).show();
 
+        jobCount++;
+        jobCountView.setText("Job Count: " + jobCount);
+
         serviceIntent.putExtra("imageName", imageName);
         JobIntentService.enqueueWork(getApplicationContext(), serviceIntent);
     }
@@ -64,15 +71,11 @@ public class DownloadImages extends AppCompatActivity {
         }
     }
 
-
-    // Our handler for received Intents. This will be called whenever an Intent
-    // with an action named "custom-event-name" is broadcasted.
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            String message = intent.getStringExtra("message");
-            Log.d("receiver", "Got message: " + message);
+            jobCount = intent.getIntExtra("jobCount", 0);
+            jobCountView.setText("Job Count: " + jobCount);
         }
     };
 

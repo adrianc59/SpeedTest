@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".DownloadImages">
 
+    <TextView
+        android:id="@+id/jobCountView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Job Count: 0"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/image1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/image1"
         android:layout_width="150dp"

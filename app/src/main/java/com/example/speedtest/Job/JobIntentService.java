@@ -49,10 +49,6 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
     protected void onHandleWork(@NonNull Intent intent) {
         Log.d(TAG, "onHandleWork");
 
-        System.out.println("==================");
-        System.out.println(jobCount);
-        System.out.println("==================");
-
         String imageName = intent.getStringExtra("imageName");
 
         File directory = new File(Environment.getExternalStorageDirectory() + "/Downloaded Images");
@@ -101,9 +97,10 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
                     e.printStackTrace();
                 }
             }
-            jobCount--;
-            sendMessage();
         }
+
+        jobCount--;
+        sendMessage();
     }
 
     @Override
@@ -122,9 +119,9 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
 
     private void sendMessage() {
         Log.d("sender", "Broadcasting message");
+
         Intent intent = new Intent("custom-event-name");
-        // You can also include some extra data.
-        intent.putExtra("message", "This is my message!");
+        intent.putExtra("jobCount", jobCount);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

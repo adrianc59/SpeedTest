@@ -17,9 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DownloadImages">
-
-        </activity>
 
         <service
             android:name=".Foreground.MyIntentService"
@@ -29,12 +26,17 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity android:name=".MainActivity">
+
+        </activity>
+
+        <activity android:name=".DownloadImages">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
