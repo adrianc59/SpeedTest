@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.speedtest.RBS.MessengerService;
 
@@ -101,6 +102,7 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
                 }
             }
             jobCount--;
+            sendMessage();
         }
     }
 
@@ -115,5 +117,14 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
         Log.d(TAG, "onStopCurrentWork");
 
         return super.onStopCurrentWork();
+    }
+
+
+    private void sendMessage() {
+        Log.d("sender", "Broadcasting message");
+        Intent intent = new Intent("custom-event-name");
+        // You can also include some extra data.
+        intent.putExtra("message", "This is my message!");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

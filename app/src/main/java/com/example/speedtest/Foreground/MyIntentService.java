@@ -49,10 +49,19 @@ public class MyIntentService extends IntentService {
             byte data[] = new byte[1024];
 
             long total = 0;
+            long currentTime;
 
             while ((count = input.read(data)) != -1) {
                 total += count;
                 int progress = (int) ((total * 100) / lenghtOfFile);
+
+                currentTime = System.currentTimeMillis();
+
+                double temp = (((double)(total / 1024) / ((currentTime - startTime) / 1000)) * 8);
+                temp = Math.round( temp * 100.0 ) / 100.0;
+                rateValue = String.valueOf(temp / 1024).concat(" Mbps");
+                System.out.println(rateValue);
+
                 notification.setProgress(progressMax, progress, false);
                 notification.setContentText(progress + "%");
                 startForeground(1, notification.build());
