@@ -12,6 +12,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -41,7 +42,9 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate");
+        String localFile = Environment.getExternalStorageDirectory() + "/DownloadedImages/" + ".jpg";
+
+        Log.d(TAG, localFile);
     }
 
     @Override

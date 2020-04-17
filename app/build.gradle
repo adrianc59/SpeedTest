@@ -21,7 +21,16 @@ android {
         }
     }
 
+
+
 }
+
+repositories {
+    maven {
+        url 'https://dl.bintray.com/spark/maven'
+    }
+}
+
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -30,4 +39,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation files('libs/commons-net-3.6.jar')
+    implementation files('libs/commons-lang3-3.10.jar')
+    implementation 'com.github.anastr:speedviewlib:1.1.7'
+    implementation 'me.spark:submitbutton:1.0.1'
+    implementation files('libs/jsoup-1.13.1.jar')
+    implementation "com.google.android.gms:play-services-location:11.0.1"
+    implementation 'com.google.code.gson:gson:2.8.6'
+
 }
+
