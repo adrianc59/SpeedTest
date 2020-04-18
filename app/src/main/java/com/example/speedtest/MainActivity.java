@@ -199,44 +199,9 @@ public class MainActivity extends Activity {
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION}, 1);
     }
 
-    public static String getCountry(){
-        String value = null;
-        ExecutorService es = Executors.newSingleThreadExecutor();
-        Future<String> result = es.submit(new Callable<String>() {
-            public String call() throws Exception {
-                try {
-                    URL url = new URL("https://ipapi.co/78.19.210.80/country_name/");
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    try {
-                        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                        BufferedReader r = new BufferedReader(new InputStreamReader(in));
-                        StringBuilder total = new StringBuilder();
-                        String line;
-                        while ((line = r.readLine()) != null) {
-                            total.append(line).append('\n');
-                        }
-                        urlConnection.disconnect();
-                        return total.toString();
-                    }finally {
-                        urlConnection.disconnect();
-                    }
-                }catch (IOException e){
-                    Log.e("Country Location: ",e.getMessage());
-                }
-                return null;
-            }
-        });
-        try {
-            value = result.get();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        es.shutdown();
-
-        return value;
-    }
 
     public void speedCheck(View v) {
+
         Intent intent1 = new Intent(getApplicationContext(), MyIntentService.class);
         startService(intent1);
     }

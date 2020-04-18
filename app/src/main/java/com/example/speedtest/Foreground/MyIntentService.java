@@ -44,6 +44,7 @@ public class MyIntentService extends IntentService {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             public void run() {
                 MainActivity.pointerSpeedometer.setVisibility(View.VISIBLE);
+
                 MainActivity.submitButton.setVisibility(View.INVISIBLE);
             }
         });
@@ -80,6 +81,7 @@ public class MyIntentService extends IntentService {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     public void run() {
                         MainActivity.pointerSpeedometer.speedTo(currentRate);
+                        System.out.println(currentRate);
                     }
                 });
 
