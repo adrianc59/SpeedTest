@@ -103,9 +103,9 @@ public class MyIntentService extends IntentService {
             rate = Math.round( rate * 100.0 ) / 100.0;
 
             if(rate > 1000)
-                rateValue = String.valueOf(rate / 1024).concat(" Mbps");
+                rateValue = String.format("%.2f", (rate / 1024)).concat(" Mbps");
             else
-                rateValue = String.valueOf(rate).concat(" Kbps");
+                rateValue = String.format("%.2f", rate).concat(" Kbps");
 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 public void run() {
@@ -128,6 +128,10 @@ public class MyIntentService extends IntentService {
         super.onDestroy();
 
         Toast.makeText(this, "Test Complete: " + rateValue, Toast.LENGTH_SHORT).show();
+
+        MainActivity.text3.setText(rateValue);
+        MainActivity.text3.setVisibility(View.VISIBLE);
+        MainActivity.text4.setVisibility(View.VISIBLE);
     }
 
     @Override

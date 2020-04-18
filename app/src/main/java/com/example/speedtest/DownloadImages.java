@@ -25,9 +25,6 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class DownloadImages extends AppCompatActivity {
-
-    private WifiReceiver wifiReceiver = new WifiReceiver();
-
     private ImageButton image1;
     private ImageButton image2;
     private ImageButton image3;
