@@ -301,6 +301,7 @@ private void requestPermission(){
             public void run() {
                 pointerSpeedometer.setVisibility(View.VISIBLE);
                 PointerSpeedometer pointerSpeedometer= (PointerSpeedometer) findViewById(R.id.speedView);
+
                 submitButton.setVisibility(View.INVISIBLE);
             }
         }, 3800);
@@ -308,6 +309,7 @@ private void requestPermission(){
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                pointerSpeedometer.setWithTremble(true);
                 pointerSpeedometer.speedTo(50);
             }
         }, 4600);
@@ -315,13 +317,24 @@ private void requestPermission(){
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 pointerSpeedometer.setWithPointer(false);
                 pointerSpeedometer.setWithTremble(false);
                 pointerSpeedometer.speedTo(0);
                 text3.setVisibility(View.VISIBLE);
                 text4.setVisibility(View.VISIBLE);
             }
-        }, 16000);
+        }, 18000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                pointerSpeedometer.setVisibility(View.INVISIBLE);
+                submitButton.setVisibility(View.VISIBLE);
+
+            }
+        }, 18000);
 
 
 
