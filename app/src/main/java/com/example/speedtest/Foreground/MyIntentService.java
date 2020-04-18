@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -27,7 +28,7 @@ import java.net.URLConnection;
 public class MyIntentService extends IntentService {
 
     private final int progressMax = 100;
-    private static String file_url = "http://ipv4.download.thinkbroadband.com/5MB.zip";
+    private static String file_url = "http://ipv4.download.thinkbroadband.com/10MB.zip";
     private String rateValue;
     private float currentRate;
 
@@ -39,6 +40,13 @@ public class MyIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         NotificationCompat.Builder notification = startMyOwnForeground();
         startForeground(1, notification.build());
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            public void run() {
+                MainActivity.pointerSpeedometer.setVisibility(View.VISIBLE);
+                MainActivity.submitButton.setVisibility(View.INVISIBLE);
+            }
+        });
 
         int count;
         try {
@@ -89,6 +97,15 @@ public class MyIntentService extends IntentService {
                 rateValue = String.valueOf(rate / 1024).concat(" Mbps");
             else
                 rateValue = String.valueOf(rate).concat(" Kbps");
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                public void run() {
+                    MainActivity.pointerSpeedometer.speedTo(0);
+                    MainActivity.pointerSpeedometer.setVisibility(View.INVISIBLE);
+                    MainActivity.submitButton.setVisibility(View.VISIBLE);
+                }
+            });
+
 
             input.close();
 

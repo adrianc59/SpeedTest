@@ -1,6 +1,5 @@
 package com.example.speedtest;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -8,14 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,51 +14,28 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.os.SystemClock;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.speedtest.Foreground.MyIntentService;
 import com.example.speedtest.RBS.MessengerService;
 import com.github.anastr.speedviewlib.PointerSpeedometer;
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.gson.Gson;
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.spark.submitbutton.SubmitButton;
-
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.URL;
-import java.net.UnknownHostException;
-import java.nio.ByteOrder;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -83,19 +51,17 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends Activity {
-    public SubmitButton submitButton;
+    public static SubmitButton submitButton;
     public static PointerSpeedometer pointerSpeedometer;
     public TextView ipView;
-    final Handler handler = new Handler();
     public TextView location;
     private static final int REQUEST_CODE = 101;
     private FusedLocationProviderClient client;
-    public String ip = "";
     public TextView country;
     public TextView ispProvider;
     public TextView county;
-    public TextView text3;
-    public TextView text4;
+    public static TextView text3;
+    public static TextView text4;
 
     private Switch wifiSwitch;
     private WifiManager wifiManager;
@@ -109,13 +75,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        System.out.println("Print 1");
         mConnection = new ServiceConnection() {
             public void onServiceConnected(ComponentName className, IBinder service) {
                 Log.d("Service Connection","Connecting");
                 mService = new Messenger(service);
                 mBound = true;
                 Log.d("Service Connection","Connected");
+
+                getIP();
             }
 
             public void onServiceDisconnected(ComponentName className) {
@@ -194,6 +161,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+
         IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(wifiStateReceiver, intentFilter);
     }
@@ -212,8 +180,7 @@ public class MainActivity extends Activity {
     private BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
-                    WifiManager.WIFI_STATE_UNKNOWN);
+            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
 
             switch (wifiStateExtra) {
                 case WifiManager.WIFI_STATE_ENABLED:
@@ -270,41 +237,8 @@ public class MainActivity extends Activity {
     }
 
     public void speedCheck(View v) {
-
-        getIP();
-
         Intent intent1 = new Intent(getApplicationContext(), MyIntentService.class);
         startService(intent1);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pointerSpeedometer.setVisibility(View.VISIBLE);
-                submitButton.setVisibility(View.INVISIBLE);
-            }
-        }, 3800);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pointerSpeedometer.setWithPointer(false);
-                pointerSpeedometer.setWithTremble(false);
-                pointerSpeedometer.speedTo(0);
-                text3.setVisibility(View.VISIBLE);
-                text4.setVisibility(View.VISIBLE);
-            }
-        }, 18000);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pointerSpeedometer.setVisibility(View.INVISIBLE);
-                submitButton.setVisibility(View.VISIBLE);
-            }
-        }, 18000);
-
-        //Intent serviceIntent = new Intent(this, ExampleJobIntentService.class);
-        //ExampleJobIntentService.enqueueWork(this, serviceIntent);
     }
 
     public void getIP() {

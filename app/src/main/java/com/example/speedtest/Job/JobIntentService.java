@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
 
 public class JobIntentService extends androidx.core.app.JobIntentService {
     private static final String TAG = "JobIntentService";
@@ -60,14 +61,11 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
             ftp.connect(server, portNumber);
             Log.d("FTP", "Connected. Reply: " + ftp.getReplyString());
 
+            ftp.enterLocalPassiveMode();
+
             ftp.login(user, password);
             Log.d("FTP", "Logged in");
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
-            System.out.println("1");
-            ftp.enterLocalPassiveMode();
-            System.out.println("2: " + ftp.getStatus());
-            System.out.println("3: " + ftp.getStatus("Images"));
-            System.out.println("4: " + ftp.retr("Images/image1.jpg"));
 
             Log.d("FTP", "Begin Downloading");
 

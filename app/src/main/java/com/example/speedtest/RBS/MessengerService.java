@@ -32,9 +32,6 @@ public class MessengerService extends Service {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MSG_SAY_HELLO:
-                    Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
-                    break;
                 case MSG_GET_IP:
                     String value = null;
                     ExecutorService es = Executors.newSingleThreadExecutor();
@@ -59,7 +56,7 @@ public class MessengerService extends Service {
                             }catch (IOException e){
                                 Log.d("Public IP: ",e.getMessage());
                             }
-                            return null;
+                            return "Private";
                         }
                     });
                     try {

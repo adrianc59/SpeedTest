@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 
 import android.content.BroadcastReceiver;
@@ -33,6 +34,7 @@ public class WifiReceiver extends AppCompatActivity {
         wifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                MainActivity.submitButton.setClickable(false);
                 if (isChecked) {
                     wifiManager.setWifiEnabled(true);
                     wifiSwitch.setText("WiFi is ON");
@@ -40,6 +42,8 @@ public class WifiReceiver extends AppCompatActivity {
                     wifiManager.setWifiEnabled(false);
                     wifiSwitch.setText("WiFi is OFF");
                 }
+                SystemClock.sleep(3000);
+                MainActivity.submitButton.setClickable(true);
             }
         });
     }
