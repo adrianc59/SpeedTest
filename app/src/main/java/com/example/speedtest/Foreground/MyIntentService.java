@@ -43,8 +43,9 @@ public class MyIntentService extends IntentService {
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             public void run() {
+                MainActivity.pointerSpeedometer.speedTo(0);
+                MainActivity.pointerSpeedometer.setWithTremble(false);
                 MainActivity.pointerSpeedometer.setVisibility(View.VISIBLE);
-
                 MainActivity.submitButton.setVisibility(View.INVISIBLE);
             }
         });
@@ -66,6 +67,8 @@ public class MyIntentService extends IntentService {
             long total = 0;
             long currentTime;
 
+            boolean sent = false;
+
             while ((count = input.read(data)) != -1) {
                 total += count;
                 int progress = (int) ((total * 100) / lenghtOfFile);
@@ -78,12 +81,16 @@ public class MyIntentService extends IntentService {
                 rateValue = String.valueOf(temp / 1024).concat(" Mbps");
                 System.out.println(rateValue);
 
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    public void run() {
-                        MainActivity.pointerSpeedometer.speedTo(currentRate);
-                        System.out.println(currentRate);
-                    }
-                });
+                if(progress > 4 && !sent) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        public void run() {
+                            MainActivity.pointerSpeedometer.setWithTremble(true);
+                            MainActivity.pointerSpeedometer.speedTo(currentRate);
+                        }
+                    });
+
+                    sent = true;
+                }
 
                 notification.setProgress(progressMax, progress, false);
                 notification.setContentText(progress + "%");

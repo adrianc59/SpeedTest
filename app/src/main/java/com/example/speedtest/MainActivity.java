@@ -199,9 +199,7 @@ public class MainActivity extends Activity {
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION}, 1);
     }
 
-
     public void speedCheck(View v) {
-
         Intent intent1 = new Intent(getApplicationContext(), MyIntentService.class);
         startService(intent1);
     }
