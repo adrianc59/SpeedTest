@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.Message;
@@ -79,6 +80,7 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
             try {
                 outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
                 boolean status = ftp.retrieveFile(filename, outputStream);
+
                 System.out.println("status = " + status);
                 System.out.println("reply  = " + ftp.getReplyString());
             } finally {
