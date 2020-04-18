@@ -1,6 +1,7 @@
 package com.example.speedtest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.Activity;
@@ -19,6 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.speedtest.Job.JobIntentService;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class DownloadImages extends AppCompatActivity {
 
@@ -44,6 +48,8 @@ public class DownloadImages extends AppCompatActivity {
         image3 = findViewById(R.id.image3);
         image4 = findViewById(R.id.image4);
 
+        requestPermission();
+
         image1.setOnClickListener( new DownloadClick());
         image2.setOnClickListener( new DownloadClick());
         image3.setOnClickListener( new DownloadClick());
@@ -52,6 +58,10 @@ public class DownloadImages extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("custom-event-name"));
 
         serviceIntent = new Intent(this, JobIntentService.class);
+    }
+
+    private void requestPermission(){
+        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION}, 1);
     }
 
     private void imageClick(String imageName) {

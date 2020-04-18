@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,9 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DownloadImages">
-
-        </activity>
 
         <service
             android:name=".Foreground.MyIntentService"
@@ -33,13 +29,23 @@
         <service
             android:name=".Job.JobIntentService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".RBS.MessengerService"
+            android:enabled="true"
+            android:exported="true" />
 
-        <activity android:name=".MainActivity"><intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+        <activity android:name=".DownloadImages">
+
+        </activity>
+
     </application>
 
 </manifest>

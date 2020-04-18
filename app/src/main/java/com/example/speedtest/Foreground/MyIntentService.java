@@ -7,6 +7,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ public class MyIntentService extends IntentService {
     private final int progressMax = 100;
     private static String file_url = "http://ipv4.download.thinkbroadband.com/5MB.zip";
     private String rateValue;
+    private float currentRate;
 
     public MyIntentService() {
         super("MyIntentService");
@@ -61,8 +65,15 @@ public class MyIntentService extends IntentService {
 
                 double temp = (((double)(total / 1024) / ((currentTime - startTime) / 1000)) * 8);
                 temp = Math.round( temp * 100.0 ) / 100.0;
+                currentRate = (float)temp/1024;
                 rateValue = String.valueOf(temp / 1024).concat(" Mbps");
                 System.out.println(rateValue);
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    public void run() {
+                        MainActivity.pointerSpeedometer.speedTo(currentRate);
+                    }
+                });
 
                 notification.setProgress(progressMax, progress, false);
                 notification.setContentText(progress + "%");

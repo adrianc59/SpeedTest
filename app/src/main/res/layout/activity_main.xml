@@ -7,21 +7,6 @@
     tools:context=".MainActivity"
     android:background="@drawable/needle_gradient">
 
-    <!--
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0 Mbps"
-        android:id="@+id/text"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@id/button"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    !-->
-
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,13 +25,10 @@
             android:paddingTop="10dp"
             android:textColor="#ffffff"
             android:elevation="30dp"
-
-
             android:textSize="34dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
             android:shadowColor="@color/gray"/>
 
         <TextView
@@ -135,8 +117,6 @@
         app:sv_centerCircleColor="#1a1f35"
         app:sv_tickNumber="11"
         android:visibility="invisible"
-
-
         />
 
     <com.spark.submitbutton.SubmitButton

@@ -1,27 +1,16 @@
 package com.example.speedtest.Job;
 
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.graphics.Bitmap;
 import android.os.Environment;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.speedtest.RBS.MessengerService;
-
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,7 +19,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class JobIntentService extends androidx.core.app.JobIntentService {
-    private static final String TAG = "ExampleJobIntentService";
+    private static final String TAG = "JobIntentService";
     private static int jobCount;
 
     public static void enqueueWork(Context context, Intent work) {
@@ -44,9 +33,6 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        String localFile = Environment.getExternalStorageDirectory() + "/DownloadedImages/" + ".jpg";
-
-        Log.d(TAG, localFile);
     }
 
     @Override
@@ -77,16 +63,24 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
             ftp.login(user, password);
             Log.d("FTP", "Logged in");
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
-            Log.d("FTP", "Downloading");
+            System.out.println("1");
+            ftp.enterLocalPassiveMode();
+            System.out.println("2: " + ftp.getStatus());
+            System.out.println("3: " + ftp.getStatus("Images"));
+            System.out.println("4: " + ftp.retr("Images/image1.jpg"));
+
+            Log.d("FTP", "Begin Downloading");
 
             OutputStream outputStream = null;
             try {
                 outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
                 boolean status = ftp.retrieveFile(filename, outputStream);
-
                 System.out.println("status = " + status);
                 System.out.println("reply  = " + ftp.getReplyString());
-            } finally {
+            }catch (Exception e){
+                Log.d("Download Image Error", e.getMessage());
+            }
+            finally {
                 if (outputStream != null) {
                     outputStream.close();
                 }
