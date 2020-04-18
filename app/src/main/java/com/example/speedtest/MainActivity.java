@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.speedtest.Foreground.MyIntentService;
 import com.github.anastr.speedviewlib.PointerSpeedometer;
@@ -63,6 +64,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 
@@ -76,9 +83,13 @@ public class MainActivity extends Activity {
     private static final int REQUEST_CODE = 101;
     private FusedLocationProviderClient client;
     public String ip = "";
-    public String country = "IRELAND";
-    public View text3;
-    public View text4;
+    public TextView country;
+    public TextView ispProvider;
+    public TextView county;
+    public TextView text3;
+    public TextView text4;
+    private TextView textViewResult;
+    private Button testbutton;
 
     private Switch wifiSwitch;
     private WifiManager wifiManager;
@@ -93,24 +104,56 @@ public class MainActivity extends Activity {
         pointerSpeedometer = findViewById(R.id.speedView);
         ipView = findViewById(R.id.ipView);
         location = findViewById(R.id.countryView);
+        ispProvider = findViewById(R.id.ispProvider);
+        county = findViewById(R.id.countyView);
         text3 = findViewById(R.id.text3);
         text4 = findViewById(R.id.text4);
+        country = findViewById(R.id.countryView);
         ip = getPublicIPAddress();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
 
-                ipView.setText(ip);
-            }
-        }, 1000);
 
-        handler.postDelayed(new Runnable() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://ip-api.com/json/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        ipView.setText(ip);
+
+        Call<Post> call = jsonPlaceHolderApi.getPost("78.19.210.80", "country", "city", "isp");
+        call.enqueue(new Callback<Post>() {
             @Override
-            public void run() {
-                //country = getCountry();
-                location.setText(country);
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if(!response.isSuccessful()){
+                    System.out.println("Code: " + response.code());
+                    return;
+                }
+                    Post posts = response.body();
+                    county.setText(posts.getCountry());
+                    country.setText(posts.getCounty());
+                    String splitMe = posts.getIsp();
+                    String strPercents = splitMe.split(" ")[0];
+                    ispProvider.setText(strPercents);
+
+                    Log.d("MyApp","POST SUCCESS");
+                }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                System.out.println(t.getMessage());
+                Log.d("MyApp","POST FAIL");
+                Log.d("MyApp",t.getMessage());
             }
-        }, 2000);
+
+        });
+
+
+
+
+
+
+
 
 
         wifiSwitch = findViewById(R.id.wifi_switch);
@@ -130,11 +173,7 @@ public class MainActivity extends Activity {
         });
 
 
-
-
         client = LocationServices.getFusedLocationProviderClient(this);
-
-
 
     }
 
@@ -169,6 +208,9 @@ public class MainActivity extends Activity {
             }
         }
     };
+
+
+
 
 
 private void requestPermission(){
@@ -261,7 +303,7 @@ private void requestPermission(){
                 PointerSpeedometer pointerSpeedometer= (PointerSpeedometer) findViewById(R.id.speedView);
                 submitButton.setVisibility(View.INVISIBLE);
             }
-        }, 3700);
+        }, 3800);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -274,10 +316,12 @@ private void requestPermission(){
             @Override
             public void run() {
                 pointerSpeedometer.setWithPointer(false);
+                pointerSpeedometer.setWithTremble(false);
+                pointerSpeedometer.speedTo(0);
                 text3.setVisibility(View.VISIBLE);
                 text4.setVisibility(View.VISIBLE);
             }
-        }, 13000);
+        }, 16000);
 
 
 
@@ -293,6 +337,10 @@ private void requestPermission(){
         //Intent serviceIntent = new Intent(this, ExampleJobIntentService.class);
         //ExampleJobIntentService.enqueueWork(this, serviceIntent);
     }
+
+
+
+
 
 
 }

@@ -11,7 +11,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.speedtest.MainActivity;
 import com.example.speedtest.R;
 
 import java.io.BufferedInputStream;
@@ -48,21 +50,23 @@ public class MyIntentService extends IntentService {
 
             byte data[] = new byte[1024];
 
-            long total = 0;
+            long total = 1;
 
             while ((count = input.read(data)) != -1) {
                 total += count;
                 int progress = (int) ((total * 100) / lenghtOfFile);
 
-                long currentTime = System.currentTimeMillis();
+                long currentTime = System.currentTimeMillis()+1000;
                 double temp = (((total / 1024) / ((currentTime - startTime) / 1000)) * 8);
                 temp = Math.round( temp * 100.0 ) / 100.0;
                 rateValue = String.valueOf(temp / 1024).concat(" Mbps");
-                System.out.println(rateValue);
+
 
                 notification.setProgress(progressMax, progress, false);
                 notification.setContentText(progress + "%");
                 startForeground(1, notification.build());
+
+
             }
 
             long endTime = System.currentTimeMillis(); //maybe
@@ -80,6 +84,8 @@ public class MyIntentService extends IntentService {
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
         }
+
+
     }
 
     @Override
@@ -115,4 +121,6 @@ public class MyIntentService extends IntentService {
 
         return notification;
     }
+
+
 }
