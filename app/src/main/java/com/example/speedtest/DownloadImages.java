@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,10 +22,12 @@ import com.example.speedtest.Job.JobIntentService;
 
 public class DownloadImages extends AppCompatActivity {
 
-    private Button image1;
-    private Button image2;
-    private Button image3;
-    private Button image4;
+    private WifiReceiver wifiReceiver = new WifiReceiver();
+
+    private ImageButton image1;
+    private ImageButton image2;
+    private ImageButton image3;
+    private ImageButton image4;
 
     private Intent serviceIntent;
     private int jobCount = 0;

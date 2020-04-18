@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/needle_gradient">
 
+    <!--
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,17 +18,215 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    !-->
 
-    <Button
-        android:id="@+id/button"
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/rect_shadow">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Speed Test"
+            android:paddingTop="10dp"
+            android:textColor="#ffffff"
+            android:elevation="30dp"
+
+
+            android:textSize="34dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            android:shadowColor="@color/gray"/>
+
+        <TextView
+            android:id="@+id/creator31231"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="POWERED BY 🅳🅺🅸🆃"
+            android:textColor="#88ffffff"
+
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/ispProvider"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="ISP"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ipView"
+        app:layout_constraintTop_toBottomOf="@+id/countyView"/>
+
+    <TextView
+        android:id="@+id/ipView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="IP"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toStartOf="@id/ispProvider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countryView"/>
+
+    <TextView
+        android:id="@+id/countryView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Country"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toStartOf="@id/countyView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
+    <TextView
+        android:id="@+id/countyView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="City"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/countryView"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
+
+    <com.github.anastr.speedviewlib.PointerSpeedometer
+        android:id="@+id/speedView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Check Speed"
-        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:sv_markColor="#ffffff"
+        app:sv_textColor="#ffffff"
+        app:sv_unit="Mbps"
+        app:sv_maxSpeed="100"
+        app:sv_backgroundCircleColor="#141526"
+        app:sv_speedometerWidth="20dp"
+        app:sv_speedometerColor="#f1f2f4"
+        app:sv_pointerColor="#ffffff"
+        app:sv_indicatorWidth="20dp"
+        app:sv_indicatorColor="#f1f2f4"
+        app:sv_indicator="NeedleIndicator"
+        app:sv_centerCircleColor="#1a1f35"
+        app:sv_tickNumber="11"
+        android:visibility="invisible"
+
+
+        />
+
+    <com.spark.submitbutton.SubmitButton
+        android:textSize="20dp"
+        android:id="@+id/button"
+        android:layout_width="1250dp"
+        android:layout_height="250dp"
+        android:text="GO"
+        android:textColor="@color/gray"
+        app:sub_btn_background="@color/white"
+        app:sub_btn_duration="4000"
+        app:sub_btn_line_color="@color/gray"
+        app:sub_btn_ripple_color="@color/gray"
+        app:sub_btn_tick_color="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:onClick="speedCheck"/>
+
+    <TextView
+        android:id="@+id/view1"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="▼ PING ms"
+        android:textColor="#88ffffff"
+
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text2"
+        app:layout_constraintTop_toBottomOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="▲ DOWNLOAD Mbps"
+        android:textColor="#88ffffff"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toStartOf="@+id/view1"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/text3"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="49.83"
+        android:textColor="#ffffff"
+        android:textSize="26dp"
+        app:layout_constraintEnd_toStartOf="@+id/text4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text2"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/text4"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+
+        android:text="45"
+        android:textColor="#ffffff"
+        android:textSize="26dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text3"
+        app:layout_constraintTop_toBottomOf="@+id/view1"
+        android:visibility="invisible"
+         />
+
+    <Switch
+        android:id="@+id/wifi_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textColor="#ffffff"
+        android:text="WiFi is OFF "
+        app:layout_constraintTop_toBottomOf="@id/text3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp"
+        />
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

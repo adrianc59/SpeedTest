@@ -11,7 +11,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.speedtest.MainActivity;
 import com.example.speedtest.R;
 
 import java.io.BufferedInputStream;
