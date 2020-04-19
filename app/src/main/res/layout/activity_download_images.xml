@@ -25,6 +25,8 @@
         android:shadowDy="2"
         android:shadowColor="@color/gray"/>
 
+
+
         <LinearLayout
             android:id="@+id/background_puppy"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,18 +37,22 @@
             android:orientation="vertical"
             android:gravity="center"
             android:background="@drawable/ppuppy"
-            android:translationZ="80dp"></LinearLayout>
+            android:translationZ="80dp">
 
-    <TextView
-        android:id="@+id/jobCountView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Job Count: 0"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/jobCountView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Job Count: 0"
+                android:background="@drawable/rounded"
+                android:textColor="@color/gray"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
     <TextView
         app:layout_constraintStart_toStartOf="parent"
