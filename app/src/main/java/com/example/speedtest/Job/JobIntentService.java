@@ -59,7 +59,7 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
             ftp.connect(server, portNumber);
             Log.d("FTP", "Connected. Reply: " + ftp.getReplyString());
 
-            ftp.enterLocalPassiveMode();
+            //ftp.enterLocalPassiveMode();
 
             ftp.login(user, password);
             Log.d("FTP", "Logged in");
@@ -89,7 +89,7 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
                     ftp.logout();
                     ftp.disconnect();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("FTP Logout Error: " + e.getMessage());
                 }
             }
         }
