@@ -21,6 +21,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
-    public static SubmitButton submitButton;
+    public static Button submitButton;
     public static PointerSpeedometer pointerSpeedometer;
 
     public TextView ipView, location, country, ispProvider, county;
@@ -197,8 +198,6 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                     String countyValue = msg.getData().getString("respCounty");
                     String countryValue = msg.getData().getString("respCountry");
                     String ispProviderValue = msg.getData().getString("respIspProvider");
-
-                    System.out.println(ispProviderValue);
 
                     country.setText(countryValue);
                     county.setText(countyValue);
