@@ -120,21 +120,20 @@
         app:sv_trembleDegree="1"
         />
 
-    <com.spark.submitbutton.SubmitButton
-        android:textSize="20dp"
+
+    <Button
+        android:textSize="30dp"
         android:id="@+id/button"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:text="GO"
-        android:textColor="@color/gray"
-        app:sub_btn_background="@color/white"
-        app:sub_btn_duration="1000"
-        app:sub_btn_ripple_color="@color/gray"
+        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:onClick="speedCheck"/>
+        android:onClick="speedCheck"
+        android:background="@drawable/riund_button"/>
 
     <TextView
         android:id="@+id/view1"

@@ -131,7 +131,7 @@ public class MyIntentService extends IntentService {
         MainActivity.text3.setText(rateValue);
         MainActivity.text3.setVisibility(View.VISIBLE);
         MainActivity.text4.setVisibility(View.VISIBLE);
-        MainActivity.wifiSwitch.setClickable(false);
+        MainActivity.wifiSwitch.setClickable(true);
         MainActivity.wifiSwitch.setVisibility(View.VISIBLE);
     }
 
