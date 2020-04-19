@@ -152,10 +152,11 @@ public class MessengerService extends Service {
 
                     try {
                         msg.replyTo.send(resp2);
+                        System.out.println("Info Sent back to main");
                     } catch (RemoteException e) {
+                        System.out.println("Error in sending info back: " + e.getMessage());
                         e.printStackTrace();
                     }
-
                     break;
 
                 default:

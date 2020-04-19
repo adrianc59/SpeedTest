@@ -76,34 +76,19 @@ public class DownloadImages extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),"You Clicked "+numberWord[+position],Toast.LENGTH_SHORT).show();
-                new DownloadClick();
+                Toast.makeText(getApplicationContext(),"You Clicked " + numberWord[+position],Toast.LENGTH_SHORT).show();
+
+                jobCount++;
+                jobCountView.setText("Job Count: " + jobCount);
+
+                serviceIntent.putExtra("imageName", "image" + numberWord[+position]);
+                JobIntentService.enqueueWork(getApplicationContext(), serviceIntent);
             }
         });
     }
 
     private void requestPermission(){
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION}, 1);
-    }
-
-    private void imageClick(String imageName) {
-        Toast.makeText(this, "YAY", Toast.LENGTH_SHORT).show();
-
-        jobCount++;
-        jobCountView.setText("Job Count: " + jobCount);
-
-        serviceIntent.putExtra("imageName", imageName);
-        JobIntentService.enqueueWork(getApplicationContext(), serviceIntent);
-    }
-
-    class DownloadClick implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            String resourceName = v.getResources().getResourceName(v.getId());
-            String[] id = resourceName.split("/");
-
-            imageClick(id[1]);
-        }
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {

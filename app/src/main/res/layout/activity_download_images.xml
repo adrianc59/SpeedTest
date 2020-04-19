@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/puppy_text"
-        android:id="@+id/laoutHelper"
+        android:id="@+id/layoutHelper"
         android:layout_width="match_parent"
         android:layout_height="100dp"/>
     <TextView
@@ -85,7 +85,7 @@
     <GridView
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/laoutHelper"
+        app:layout_constraintTop_toBottomOf="@id/layoutHelper"
         app:layout_constraintBottom_toBottomOf="@id/laoutHelper2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -199,13 +199,12 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                     String countryValue = msg.getData().getString("respCountry");
                     String ispProviderValue = msg.getData().getString("respIspProvider");
 
-                    if (ispProviderValue != null){
-
-                        ispProvider.setText(ispProviderValue.split(" ")[0]);
-                    }
                     country.setText(countryValue);
                     county.setText(countyValue);
 
+                    if (ispProviderValue != null){
+                        ispProvider.setText(ispProviderValue.split(" ")[0]);
+                    }
                 }
             }
         }
