@@ -24,8 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class MessengerService extends Service {
-    public static final int MSG_SAY_HELLO = 1;
-    public static final int MSG_GET_IP = 2;
+    public static final int MSG_GET_IP = 1;
     public static final int MSG_GET_IP_RESPONSE = 2;
 
     class IncomingHandler extends Handler {

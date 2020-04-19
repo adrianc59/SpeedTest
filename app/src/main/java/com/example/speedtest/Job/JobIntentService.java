@@ -10,14 +10,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetAddress;
 
 public class JobIntentService extends androidx.core.app.JobIntentService {
     private static final String TAG = "JobIntentService";
@@ -112,7 +110,6 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
 
         return super.onStopCurrentWork();
     }
-
 
     private void sendMessage() {
         Log.d("sender", "Broadcasting message");

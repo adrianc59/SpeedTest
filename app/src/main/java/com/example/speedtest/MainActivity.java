@@ -205,8 +205,7 @@ public class MainActivity extends Activity {
     }
 
     public void getIP() {
-        Message msg = Message
-                .obtain(null, MessengerService.MSG_GET_IP);
+        Message msg = Message.obtain(null, MessengerService.MSG_GET_IP);
 
         msg.replyTo = new Messenger(new ResponseHandler());
 
