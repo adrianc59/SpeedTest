@@ -1,5 +1,6 @@
 package com.example.speedtest;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -7,13 +8,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -51,27 +56,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
     public static SubmitButton submitButton;
     public static PointerSpeedometer pointerSpeedometer;
-    public TextView ipView;
-    public TextView location;
-    private static final int REQUEST_CODE = 101;
-    private FusedLocationProviderClient client;
-    public TextView country;
-    public TextView ispProvider;
-    public TextView county;
-    public static TextView text3;
-    public static TextView text4;
+
+    public TextView ipView, location, country, ispProvider, county;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView text3, text4;
     public String userIp;
 
-    private Switch wifiSwitch;
+    public static Switch wifiSwitch;
     private WifiManager wifiManager;
 
     ServiceConnection mConnection;
     Messenger mService = null;
     boolean mBound;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +95,7 @@ public class MainActivity extends Activity {
         };
 
         bindService(new Intent(this, MessengerService.class), mConnection, Context.BIND_AUTO_CREATE);
+
         requestPermission();
 
         submitButton = findViewById(R.id.button);
@@ -110,84 +110,14 @@ public class MainActivity extends Activity {
         wifiSwitch = findViewById(R.id.wifi_switch);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-        wifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
+        wifiSwitch.setOnCheckedChangeListener(this);
 
-                if (isChecked) {
-                    wifiManager.setWifiEnabled(true);
-                    wifiSwitch.setText("WiFi is ON");
-                } else {
-                    wifiManager.setWifiEnabled(false);
-                    wifiSwitch.setText("WiFi is OFF");
-                }
-                submitButton.setClickable(false);
-
-                //try find a way to call this on a timer, all ways I tried dont work cause its not being done on the same thread :(
-                // *********
-
-                if(mBound == true){
-                    getIP();
-                }
-                submitButton.setClickable(true);
-
-                // *********
-            }
-
-
-        });
-
-        client = LocationServices.getFusedLocationProviderClient(this);
-
-    }
-
-
-    public void apiCall(String userIp){
-
-        userIp = userIp.split(" ")[0];
-        System.out.println("***" + userIp + "***");
-
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://ip-api.com/json/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        Call<Post> call = jsonPlaceHolderApi.getPost(userIp, "country", "city", "isp");
-        call.enqueue(new Callback<Post>() {
-            @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
-                if(!response.isSuccessful()){
-                    System.out.println("Code: " + response.code());
-                    return;
-                }
-                Post posts = response.body();
-                county.setText(posts.getCountry());
-                country.setText(posts.getCounty());
-                String splitMe = posts.getIsp();
-                String strPercents = splitMe.split(" ")[0];
-                ispProvider.setText("ISP: " + strPercents);
-
-                Log.d("MyApp","POST SUCCESS");
-            }
-
-            @Override
-            public void onFailure(Call<Post> call, Throwable t) {
-                System.out.println(t.getMessage());
-                Log.d("MyApp","POST FAIL");
-                Log.d("MyApp",t.getMessage());
-            }
-
-        });
-
-
+        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(wifiStateReceiver, intentFilter);
     }
@@ -203,34 +133,34 @@ public class MainActivity extends Activity {
         unregisterReceiver(wifiStateReceiver);
     }
 
-    private BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
-
-            switch (wifiStateExtra) {
-                case WifiManager.WIFI_STATE_ENABLED:
-                    wifiSwitch.setChecked(true);
-                    wifiSwitch.setText("WiFi is ON");
-                    break;
-                case WifiManager.WIFI_STATE_DISABLED:
-                    wifiSwitch.setChecked(false);
-                    wifiSwitch.setText("WiFi is OFF");
-                    break;
-            }
-        }
-    };
-
     private void requestPermission(){
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION}, 1);
+    }
+
+    public void apiCall(String userIp){
+        Toast.makeText(MainActivity.this, "Fetching Your Info", Toast.LENGTH_SHORT).show();
+
+        Message msg = Message.obtain(null, MessengerService.MSG_GET_INFO, userIp);
+
+        msg.replyTo = new Messenger(new ResponseHandler());
+
+        try {
+            mService.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public void speedCheck(View v) {
         Intent intent1 = new Intent(getApplicationContext(), MyIntentService.class);
         startService(intent1);
+
+        wifiSwitch.setClickable(false);
+        wifiSwitch.setVisibility(View.INVISIBLE);
     }
 
     public void getIP() {
+        Toast.makeText(MainActivity.this, "Fetching Your IP", Toast.LENGTH_SHORT).show();
         Message msg = Message.obtain(null, MessengerService.MSG_GET_IP);
 
         msg.replyTo = new Messenger(new ResponseHandler());
@@ -242,7 +172,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    // This class handles the Service response
     class ResponseHandler extends Handler {
 
         @Override
@@ -252,11 +181,73 @@ public class MainActivity extends Activity {
             switch (respCode) {
                 case MessengerService.MSG_GET_IP_RESPONSE: {
                     String result = msg.getData().getString("respData");
-                    ipView.setText("IP: " + result);
-                    apiCall(result);
-                    Toast.makeText(getApplicationContext(), userIp, Toast.LENGTH_SHORT).show();
+                    if(result.equalsIgnoreCase("Private")) {
+                        ipView.setText("IP: " + result);
+                        ispProvider.setText("ISP: Private");
+                        county.setText("County: Private");
+                        country.setText("Country: Private");
+                    }
+                    else {
+                        ipView.setText(result);
+                        apiCall(result);
+                    }
+                }
+
+                case MessengerService.MSG_GET_INFO_RESPONSE: {
+                    String countyValue = msg.getData().getString("respCounty");
+                    String countryValue = msg.getData().getString("respCountry");
+                    String ispProviderValue = msg.getData().getString("respIspProvider");
+
+                    country.setText(countryValue);
+                    county.setText(countyValue);
+                    ispProvider.setText(ispProviderValue);
                 }
             }
+        }
+    }
+
+    private BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int wifiStateExtra = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+
+            switch (wifiStateExtra) {
+                case WifiManager.WIFI_STATE_ENABLED:
+                    wifiSwitch.setChecked(true);
+                    wifiSwitch.setText("WiFi is ON");
+
+                    submitButton.setClickable(false);
+
+                    if(mBound == true){
+                        getIP();
+                    }
+
+                    submitButton.setClickable(true);
+                    break;
+                case WifiManager.WIFI_STATE_DISABLED:
+                    wifiSwitch.setChecked(false);
+                    wifiSwitch.setText("WiFi is OFF");
+
+                    submitButton.setClickable(false);
+
+                    if(mBound == true){
+                        getIP();
+                    }
+
+                    submitButton.setClickable(true);
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            wifiManager.setWifiEnabled(true);
+            wifiSwitch.setText("WiFi is ON");
+        } else {
+            wifiManager.setWifiEnabled(false);
+            wifiSwitch.setText("WiFi is OFF");
         }
     }
 }
