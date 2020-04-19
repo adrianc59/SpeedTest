@@ -117,6 +117,7 @@
         app:sv_centerCircleColor="#1a1f35"
         app:sv_tickNumber="11"
         android:visibility="invisible"
+        app:sv_trembleDegree="1"
         />
 
     <com.spark.submitbutton.SubmitButton
@@ -166,7 +167,7 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="49.83"
+        android:text="4.50"
         android:textColor="#ffffff"
         android:textSize="26dp"
         app:layout_constraintEnd_toStartOf="@+id/text4"

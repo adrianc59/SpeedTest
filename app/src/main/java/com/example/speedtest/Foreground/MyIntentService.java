@@ -103,7 +103,7 @@ public class MyIntentService extends IntentService {
             rate = Math.round( rate * 100.0 ) / 100.0;
 
             if(rate > 1000)
-                rateValue = String.format("%.2f", (rate / 1024)).concat(" Mbps");
+                rateValue = String.format("%.2f", (rate / 1024));
             else
                 rateValue = String.format("%.2f", rate).concat(" Kbps");
 

@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
@@ -62,6 +63,7 @@ public class MainActivity extends Activity {
     public TextView county;
     public static TextView text3;
     public static TextView text4;
+    public String userIp;
 
     private Switch wifiSwitch;
     private WifiManager wifiManager;
@@ -69,6 +71,7 @@ public class MainActivity extends Activity {
     ServiceConnection mConnection;
     Messenger mService = null;
     boolean mBound;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +107,46 @@ public class MainActivity extends Activity {
         text3 = findViewById(R.id.text3);
         text4 = findViewById(R.id.text4);
         country = findViewById(R.id.countryView);
+        wifiSwitch = findViewById(R.id.wifi_switch);
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        wifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    wifiManager.setWifiEnabled(true);
+                    wifiSwitch.setText("WiFi is ON");
+                } else {
+                    wifiManager.setWifiEnabled(false);
+                    wifiSwitch.setText("WiFi is OFF");
+                }
+                submitButton.setClickable(false);
+
+                //try find a way to call this on a timer, all ways I tried dont work cause its not being done on the same thread :(
+                // *********
+
+                if(mBound == true){
+                    getIP();
+                }
+                submitButton.setClickable(true);
+
+                // *********
+            }
+
+
+        });
+
+        client = LocationServices.getFusedLocationProviderClient(this);
+
+    }
+
+
+    public void apiCall(String userIp){
+
+        userIp = userIp.split(" ")[0];
+        System.out.println("***" + userIp + "***");
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://ip-api.com/json/")
@@ -111,8 +154,7 @@ public class MainActivity extends Activity {
                 .build();
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-        Call<Post> call = jsonPlaceHolderApi.getPost("78.19.210.80", "country", "city", "isp");
+        Call<Post> call = jsonPlaceHolderApi.getPost(userIp, "country", "city", "isp");
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
@@ -120,15 +162,15 @@ public class MainActivity extends Activity {
                     System.out.println("Code: " + response.code());
                     return;
                 }
-                    Post posts = response.body();
-                    county.setText(posts.getCountry());
-                    country.setText(posts.getCounty());
-                    String splitMe = posts.getIsp();
-                    String strPercents = splitMe.split(" ")[0];
-                    ispProvider.setText("ISP: " + strPercents);
+                Post posts = response.body();
+                county.setText(posts.getCountry());
+                country.setText(posts.getCounty());
+                String splitMe = posts.getIsp();
+                String strPercents = splitMe.split(" ")[0];
+                ispProvider.setText("ISP: " + strPercents);
 
-                    Log.d("MyApp","POST SUCCESS");
-                }
+                Log.d("MyApp","POST SUCCESS");
+            }
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
@@ -139,23 +181,7 @@ public class MainActivity extends Activity {
 
         });
 
-        wifiSwitch = findViewById(R.id.wifi_switch);
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-        wifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    wifiManager.setWifiEnabled(true);
-                    wifiSwitch.setText("WiFi is ON");
-                } else {
-                    wifiManager.setWifiEnabled(false);
-                    wifiSwitch.setText("WiFi is OFF");
-                }
-            }
-        });
-
-        client = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @Override
@@ -227,6 +253,8 @@ public class MainActivity extends Activity {
                 case MessengerService.MSG_GET_IP_RESPONSE: {
                     String result = msg.getData().getString("respData");
                     ipView.setText("IP: " + result);
+                    apiCall(result);
+                    Toast.makeText(getApplicationContext(), userIp, Toast.LENGTH_SHORT).show();
                 }
             }
         }

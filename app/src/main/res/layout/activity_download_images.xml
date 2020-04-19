@@ -4,7 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DownloadImages">
+    tools:context=".DownloadImages"
+    android:background="@color/common_google_signin_btn_text_light_disabled">
+
+    <TextView
+        android:id="@+id/puppy_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:layout_marginRight="20dp"
+        android:text="PUPPY          PICS"
+        android:textColor="#ffffff"
+        android:textSize="35dp"
+        android:translationZ="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowColor="@color/gray"/>
+
+        <LinearLayout
+            android:id="@+id/background_puppy"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/ppuppy"
+            android:translationZ="80dp"></LinearLayout>
 
     <TextView
         android:id="@+id/jobCountView"
@@ -12,54 +43,32 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/image1"
         app:layout_constraintTop_toTopOf="parent"
         android:text="Job Count: 0"
-        android:textSize="20sp"/>
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/image1"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:text="Image 1"
+    <TextView
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image2"
-        app:layout_constraintBottom_toTopOf="@+id/image3"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/image1"/>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/image2"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:text="Image 2"
-        app:layout_constraintStart_toEndOf="@+id/image1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/image4"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/image2"/>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/image3"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:text="Image 3"
-        app:layout_constraintTop_toBottomOf="@+id/image1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image4"
+        app:layout_constraintTop_toBottomOf="@id/puppy_text"
+        android:id="@+id/laoutHelper"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+    <TextView
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/image3"/>
-
-        <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/image4"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:text="Image 4"
-        app:layout_constraintStart_toEndOf="@+id/image3"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image2"
-            android:background="@drawable/image4"/>
+       app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/laoutHelper3"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:background="@drawable/ripple"/>
+
+    <!--
+
+
+
+
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:layout_width="200dp"
@@ -71,6 +80,30 @@
         android:layout_marginBottom="70dp"
         android:indeterminate="true"
         android:indeterminateDrawable="@drawable/progress_indeterminate" />
+       -->
+
+    <GridView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/laoutHelper"
+        app:layout_constraintBottom_toBottomOf="@id/laoutHelper2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/grid_view"
+        android:numColumns="2"
+        android:layout_marginTop="170dp"
+        android:nestedScrollingEnabled="true"
+        android:translationZ="90dp"/>
+
+
+    <TextView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/laoutHelper2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
 
 
 

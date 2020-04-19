@@ -45,7 +45,7 @@ public class MessengerService extends Service {
                                     StringBuilder total = new StringBuilder();
                                     String line;
                                     while ((line = r.readLine()) != null) {
-                                        total.append(line).append('\n');
+                                        total.append(line).append(' ');
                                     }
                                     urlConnection.disconnect();
                                     return total.toString();
