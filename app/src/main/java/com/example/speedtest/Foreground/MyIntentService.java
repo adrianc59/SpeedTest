@@ -107,20 +107,19 @@ public class MyIntentService extends IntentService {
             else
                 rateValue = String.format("%.2f", rate).concat(" Kbps");
 
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                public void run() {
-                    MainActivity.pointerSpeedometer.speedTo(0);
-                    MainActivity.pointerSpeedometer.setVisibility(View.INVISIBLE);
-                    MainActivity.submitButton.setVisibility(View.VISIBLE);
-                }
-            });
-
-
             input.close();
 
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
         }
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            public void run() {
+                MainActivity.pointerSpeedometer.speedTo(0);
+                MainActivity.pointerSpeedometer.setVisibility(View.INVISIBLE);
+                MainActivity.submitButton.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
@@ -132,6 +131,8 @@ public class MyIntentService extends IntentService {
         MainActivity.text3.setText(rateValue);
         MainActivity.text3.setVisibility(View.VISIBLE);
         MainActivity.text4.setVisibility(View.VISIBLE);
+        MainActivity.wifiSwitch.setClickable(false);
+        MainActivity.wifiSwitch.setVisibility(View.VISIBLE);
     }
 
     @Override
