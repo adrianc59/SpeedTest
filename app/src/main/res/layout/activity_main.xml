@@ -50,7 +50,7 @@
 
     <TextView
         android:id="@+id/ispProvider"
-        android:layout_width="140dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="ISP"
@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/ipView"
-        android:layout_width="190dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="IP"
@@ -74,7 +74,7 @@
 
     <TextView
         android:id="@+id/countryView"
-        android:layout_width="190dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Country"
@@ -85,7 +85,7 @@
         app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
     <TextView
         android:id="@+id/countyView"
-        android:layout_width="140dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="City"
@@ -137,7 +137,7 @@
 
     <TextView
         android:id="@+id/view1"
-        android:layout_width="140dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="▼ PING ms"
@@ -150,7 +150,7 @@
 
     <TextView
         android:id="@+id/text2"
-        android:layout_width="140dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="▲ DOWNLOAD Mbps"
@@ -176,7 +176,7 @@
 
     <TextView
         android:id="@+id/text4"
-        android:layout_width="120dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
 
