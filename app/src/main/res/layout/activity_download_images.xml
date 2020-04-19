@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DownloadImages"
-    android:background="@color/common_google_signin_btn_text_light_disabled">
+    android:background="@color/background_material_light">
+
 
     <TextView
         android:id="@+id/puppy_text"
@@ -35,18 +36,22 @@
             android:orientation="vertical"
             android:gravity="center"
             android:background="@drawable/ppuppy"
-            android:translationZ="80dp"></LinearLayout>
+            android:translationZ="80dp">
 
-    <TextView
-        android:id="@+id/jobCountView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Job Count: 0"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/jobCountView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Job Count: 0"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                />
+        </LinearLayout>
+
+
 
     <TextView
         app:layout_constraintStart_toStartOf="parent"

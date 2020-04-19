@@ -1,5 +1,6 @@
 package com.example.speedtest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -10,8 +11,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -38,10 +43,7 @@ public class DownloadImages extends AppCompatActivity {
     int[] numberProgress = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
-    //private ImageButton image1;
-    //private ImageButton image2;
-    //private ImageButton image3;
-    //private ImageButton image4;
+
 
     private Intent serviceIntent;
     private int jobCount = 0;
@@ -53,17 +55,10 @@ public class DownloadImages extends AppCompatActivity {
         setContentView(R.layout.activity_download_images);
 
         jobCountView = findViewById(R.id.jobCountView);
-       //image1 = findViewById(R.id.image1);
-        //image2 = findViewById(R.id.image2);
-        //image3 = findViewById(R.id.image3);
-        //image4 = findViewById(R.id.image4);
+
         gridView = findViewById(R.id.grid_view);
         requestPermission();
 
-        //image1.setOnClickListener( new DownloadClick());
-        //image2.setOnClickListener( new DownloadClick());
-        //image3.setOnClickListener( new DownloadClick());
-        //image4.setOnClickListener( new DownloadClick());
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("custom-event-name"));
 
@@ -83,6 +78,7 @@ public class DownloadImages extends AppCompatActivity {
 
                 serviceIntent.putExtra("imageName", "image" + numberWord[+position]);
                 JobIntentService.enqueueWork(getApplicationContext(), serviceIntent);
+                numberProgress[+position] = 100;
             }
         });
     }
@@ -103,5 +99,29 @@ public class DownloadImages extends AppCompatActivity {
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_pages, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.item1:
+                Intent i = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(i);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void updateDownloadPercentage(int imageNumber, int percentage){
+        numberProgress[imageNumber-1] = percentage;
     }
 }
