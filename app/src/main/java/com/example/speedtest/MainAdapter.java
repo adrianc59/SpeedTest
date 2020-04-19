@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class MainAdapter extends BaseAdapter {
@@ -15,12 +16,13 @@ public class MainAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private String[] numberWord;
     private int[] numberImage;
+    private int[] numberProgress;
 
-    public MainAdapter(Context c,String[] numberWord, int[] numberImage ){
+    public MainAdapter(Context c,String[] numberWord, int[] numberImage, int[] numberProgress ){
         context = c;
         this.numberWord = numberWord;
         this.numberImage = numberImage;
-
+        this.numberProgress = numberProgress;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class MainAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -50,9 +52,14 @@ public class MainAdapter extends BaseAdapter {
 
         ImageView imageView = convertView.findViewById(R.id.image_view);
         TextView textView = convertView.findViewById(R.id.text_view);
+        ProgressBar progressBar = convertView.findViewById(R.id.progress);
+
+
 
         imageView.setImageResource(numberImage[position]);
         textView.setText(numberWord[position]);
+        progressBar.setProgress(Math.abs(100 - numberProgress[position]));
+
         return convertView;
     }
 }

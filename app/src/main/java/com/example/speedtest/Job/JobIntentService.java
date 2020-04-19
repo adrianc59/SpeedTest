@@ -70,6 +70,7 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
             OutputStream outputStream = null;
             try {
                 outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
+
                 boolean status = ftp.retrieveFile(filename, outputStream);
                 System.out.println("status = " + status);
                 System.out.println("reply  = " + ftp.getReplyString());

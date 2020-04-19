@@ -6,7 +6,7 @@
     android:padding="7dp"
     android:gravity="center">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:orientation="vertical"
@@ -21,10 +21,20 @@
         android:layout_height="180dp"
         android:id="@+id/image_view"/>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="180dp"
+            android:max="100"
+            android:layout_height="180dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:progressDrawable="@drawable/custom_progressbar"
+            android:rotation="180"
+            android:progress="95"/>
+
+    </FrameLayout>
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:id="@+id/text_view"
         android:text="Numbers"
         android:textSize="0sp"

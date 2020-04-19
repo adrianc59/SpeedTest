@@ -35,6 +35,8 @@ public class DownloadImages extends AppCompatActivity {
             R.drawable.image9,R.drawable.image10,R.drawable.image11,R.drawable.image12,
             R.drawable.image13,R.drawable.image14};
 
+    int[] numberProgress = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
 
     //private ImageButton image1;
     //private ImageButton image2;
@@ -67,15 +69,15 @@ public class DownloadImages extends AppCompatActivity {
 
         serviceIntent = new Intent(this, JobIntentService.class);
 
-        MainAdapter adapter = new MainAdapter(this,numberWord,numberImage);
+        MainAdapter adapter = new MainAdapter(this,numberWord,numberImage, numberProgress);
         gridView.setAdapter(adapter);
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),"You Clicked"+numberWord[+position],Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getApplicationContext(),"You Clicked "+numberWord[+position],Toast.LENGTH_SHORT).show();
+                new DownloadClick();
             }
         });
     }
