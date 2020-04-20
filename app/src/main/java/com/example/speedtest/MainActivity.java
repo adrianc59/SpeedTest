@@ -20,6 +20,9 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -27,7 +30,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.speedtest.Foreground.MyIntentService;
 import com.example.speedtest.RBS.MessengerService;
@@ -78,6 +85,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mConnection = new ServiceConnection() {
             public void onServiceConnected(ComponentName className, IBinder service) {
                 Log.d("Service Connection","Connecting");
@@ -114,6 +122,9 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         wifiSwitch.setOnCheckedChangeListener(this);
 
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
+
+        android.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setActionBar(toolbar);
     }
 
     @Override
@@ -199,12 +210,13 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                     String countryValue = msg.getData().getString("respCountry");
                     String ispProviderValue = msg.getData().getString("respIspProvider");
 
+                    if (ispProviderValue != null){
+
+                        ispProvider.setText(ispProviderValue.split(" ")[0]);
+                    }
                     country.setText(countryValue);
                     county.setText(countyValue);
 
-                    if (ispProviderValue != null){
-                        ispProvider.setText(ispProviderValue.split(" ")[0]);
-                    }
                 }
             }
         }
@@ -253,5 +265,26 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             wifiManager.setWifiEnabled(false);
             wifiSwitch.setText("WiFi is OFF");
         }
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_pages2, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.item1:
+                Intent i = new Intent(getBaseContext(), DownloadImages.class);
+                startActivity(i);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

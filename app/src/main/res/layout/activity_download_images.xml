@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DownloadImages"
-    android:background="@color/common_google_signin_btn_text_light_disabled">
+    android:background="@color/background_material_light">
+
 
     <TextView
         android:id="@+id/puppy_text"
@@ -24,8 +25,6 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowColor="@color/gray"/>
-
-
 
         <LinearLayout
             android:id="@+id/background_puppy"
