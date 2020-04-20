@@ -5,5 +5,4 @@
     android:background="@color/colorPrimary"
     android:titleTextColor="@color/white"
     android:elevation="4dp">
-
 </Toolbar>

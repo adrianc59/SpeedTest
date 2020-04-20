@@ -10,8 +10,10 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.speedtest.JsonPlaceHolderApi;
+import com.example.speedtest.MainActivity;
 import com.example.speedtest.Post;
 
 import org.json.JSONObject;

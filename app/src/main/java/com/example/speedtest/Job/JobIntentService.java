@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -20,6 +21,7 @@ import java.io.OutputStream;
 public class JobIntentService extends androidx.core.app.JobIntentService {
     private static final String TAG = "JobIntentService";
     private static int jobCount;
+    private boolean success = false;
 
     public static void enqueueWork(Context context, Intent work) {
         Log.d(TAG, "Enqueue Work");
@@ -38,7 +40,9 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
     protected void onHandleWork(@NonNull Intent intent) {
         Log.d(TAG, "onHandleWork");
 
-        String imageName = intent.getStringExtra("imageName");
+        int position = intent.getIntExtra("position", 0);
+
+        String imageName = "image" + position;
 
         File directory = new File(Environment.getExternalStorageDirectory() + "/Downloaded Images");
         if (!directory.exists()) {
@@ -74,6 +78,10 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
                 boolean status = ftp.retrieveFile(filename, outputStream);
                 System.out.println("status = " + status);
                 System.out.println("reply  = " + ftp.getReplyString());
+
+                if(ftp.getReplyString().trim().equals("226 Transfer complete.")){
+                    success = true;
+                }
             }catch (Exception e){
                 Log.d("Download Image Error", e.getMessage());
             }
@@ -84,6 +92,7 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(this,"FTP SERVER ERROR",Toast.LENGTH_LONG).show();
         } finally {
             if (ftp != null) {
                 try {
@@ -96,7 +105,7 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
         }
 
         jobCount--;
-        sendMessage();
+        sendMessage(position);
     }
 
     @Override
@@ -108,15 +117,28 @@ public class JobIntentService extends androidx.core.app.JobIntentService {
     @Override
     public boolean onStopCurrentWork() {
         Log.d(TAG, "onStopCurrentWork");
-
         return super.onStopCurrentWork();
     }
 
-    private void sendMessage() {
+    private void sendMessage(int passedPosition) {
         Log.d("sender", "Broadcasting message");
+
+        int position = 0;
+        String message;
+
+        if(success) {
+            message = "Download Successful";
+            position = passedPosition;
+        }
+        else {
+            message = "Download Failed";
+            position = -1;
+        }
 
         Intent intent = new Intent("custom-event-name");
         intent.putExtra("jobCount", jobCount);
+        intent.putExtra("message", message);
+        intent.putExtra("position", position);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

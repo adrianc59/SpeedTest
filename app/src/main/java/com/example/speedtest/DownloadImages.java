@@ -40,10 +40,9 @@ public class DownloadImages extends AppCompatActivity {
             R.drawable.image9,R.drawable.image10,R.drawable.image11,R.drawable.image12,
             R.drawable.image13,R.drawable.image14};
 
-    int[] numberProgress = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private MainAdapter adapter;
 
-
-
+    public int[] numberProgress = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     private Intent serviceIntent;
     private int jobCount = 0;
@@ -59,26 +58,25 @@ public class DownloadImages extends AppCompatActivity {
         gridView = findViewById(R.id.grid_view);
         requestPermission();
 
-
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("custom-event-name"));
 
         serviceIntent = new Intent(this, JobIntentService.class);
 
-        MainAdapter adapter = new MainAdapter(this,numberWord,numberImage, numberProgress);
+        adapter = new MainAdapter(this, numberWord, numberImage, numberProgress);
         gridView.setAdapter(adapter);
-
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),"You Clicked " + numberWord[+position],Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Downloading Image " + numberWord[+position],Toast.LENGTH_LONG).show();
 
                 jobCount++;
                 jobCountView.setText("Job Count: " + jobCount);
 
-                serviceIntent.putExtra("imageName", "image" + numberWord[+position]);
+                System.out.println("CLICKED: "+ position);
+
+                serviceIntent.putExtra("position", position+1);
                 JobIntentService.enqueueWork(getApplicationContext(), serviceIntent);
-                numberProgress[+position] = 100;
             }
         });
     }
@@ -90,6 +88,28 @@ public class DownloadImages extends AppCompatActivity {
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String message = intent.getStringExtra("message");
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+            final int position = intent.getIntExtra("position", 0);
+
+            if(position != -1) {
+                DownloadImages.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        numberProgress[+(position - 1)] = 100;
+                    }
+                });
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter = new MainAdapter(DownloadImages.this, numberWord, numberImage, numberProgress);
+                        gridView.setAdapter(adapter);
+                    }
+                });
+            }
+
             jobCount = intent.getIntExtra("jobCount", 0);
             jobCountView.setText("Job Count: " + jobCount);
         }
@@ -113,8 +133,7 @@ public class DownloadImages extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.item1:
-                Intent i = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(i);
+                finish();
                 return true;
         }
 

@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.speedtest.MainActivity;
 import com.example.speedtest.R;
@@ -31,21 +30,33 @@ public class MyIntentService extends IntentService {
     private static String file_url = "http://ipv4.download.thinkbroadband.com/10MB.zip";
     private String rateValue;
     private float currentRate;
+    private boolean stopped;
 
     public MyIntentService() {
         super("MyIntentService");
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected void onHandleIntent(final Intent intent) {
         NotificationCompat.Builder notification = startMyOwnForeground();
         startForeground(1, notification.build());
+
+        MainActivity.stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopService(intent);
+                stopForeground(true);
+                stopSelf();
+                stopped = true;
+            }
+        });
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             public void run() {
                 MainActivity.pointerSpeedometer.speedTo(0);
                 MainActivity.pointerSpeedometer.setWithTremble(false);
                 MainActivity.pointerSpeedometer.setVisibility(View.VISIBLE);
+                MainActivity.stopButton.setVisibility(View.VISIBLE);
                 MainActivity.submitButton.setVisibility(View.INVISIBLE);
             }
         });
@@ -70,6 +81,9 @@ public class MyIntentService extends IntentService {
             boolean sent = false;
 
             while ((count = input.read(data)) != -1) {
+                if (stopped)
+                {   break;   }
+
                 total += count;
                 int progress = (int) ((total * 100) / lenghtOfFile);
 
@@ -78,7 +92,7 @@ public class MyIntentService extends IntentService {
                 double temp = (((double)(total / 1024) / ((currentTime - startTime) / 1000)) * 8);
                 temp = Math.round( temp * 100.0 ) / 100.0;
                 currentRate = (float)temp/1024;
-                rateValue = String.valueOf(temp / 1024).concat(" Mbps");
+                rateValue = String.valueOf(String.format("%.2f", (temp / 1024)).concat(" Mbps"));
                 System.out.println(rateValue);
 
                 if(progress > 4 && !sent) {
@@ -117,7 +131,14 @@ public class MyIntentService extends IntentService {
             public void run() {
                 MainActivity.pointerSpeedometer.speedTo(0);
                 MainActivity.pointerSpeedometer.setVisibility(View.INVISIBLE);
+                MainActivity.stopButton.setVisibility(View.INVISIBLE);
                 MainActivity.submitButton.setVisibility(View.VISIBLE);
+
+                if(!stopped){
+                    MainActivity.text3.setText(rateValue);
+                    MainActivity.text3.setVisibility(View.VISIBLE);
+                    MainActivity.text4.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -126,18 +147,18 @@ public class MyIntentService extends IntentService {
     public void onDestroy() {
         super.onDestroy();
 
-        Toast.makeText(this, "Test Complete: " + rateValue, Toast.LENGTH_SHORT).show();
+        if (stopped)
+            Toast.makeText(this, "Test Stopped", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, "Test Finished", Toast.LENGTH_LONG).show();
 
-        MainActivity.text3.setText(rateValue);
-        MainActivity.text3.setVisibility(View.VISIBLE);
-        MainActivity.text4.setVisibility(View.VISIBLE);
         MainActivity.wifiSwitch.setClickable(true);
         MainActivity.wifiSwitch.setVisibility(View.VISIBLE);
+        MainActivity.stopButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Test Started", Toast.LENGTH_SHORT).show();
         return super.onStartCommand(intent,flags,startId);
     }
 

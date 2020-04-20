@@ -1,24 +1,19 @@
 package com.example.speedtest;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,47 +26,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.speedtest.Foreground.MyIntentService;
 import com.example.speedtest.RBS.MessengerService;
 import com.github.anastr.speedviewlib.PointerSpeedometer;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.spark.submitbutton.SubmitButton;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     public static Button submitButton;
+    public static Button stopButton;
     public static PointerSpeedometer pointerSpeedometer;
 
     public TextView ipView, location, country, ispProvider, county;
     @SuppressLint("StaticFieldLeak")
     public static TextView text3, text4;
-    public String userIp;
 
     public static Switch wifiSwitch;
     private WifiManager wifiManager;
@@ -85,15 +57,12 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         mConnection = new ServiceConnection() {
             public void onServiceConnected(ComponentName className, IBinder service) {
                 Log.d("Service Connection","Connecting");
                 mService = new Messenger(service);
                 mBound = true;
                 Log.d("Service Connection","Connected");
-
-                getIP();
             }
 
             public void onServiceDisconnected(ComponentName className) {
@@ -108,6 +77,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         requestPermission();
 
         submitButton = findViewById(R.id.button);
+        stopButton = findViewById(R.id.stopBtn);
         pointerSpeedometer = findViewById(R.id.speedView);
         ipView = findViewById(R.id.ipView);
         location = findViewById(R.id.countryView);
@@ -120,11 +90,6 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         wifiSwitch.setOnCheckedChangeListener(this);
-
-        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
-
-        android.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-        setActionBar(toolbar);
     }
 
     @Override
@@ -149,10 +114,22 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION}, 1);
     }
 
-    public void apiCall(String userIp){
-        Toast.makeText(MainActivity.this, "Fetching Your Info", Toast.LENGTH_SHORT).show();
+    public void speedCheck(View v) {
+        Toast.makeText(MainActivity.this, "Starting Speed Test", Toast.LENGTH_LONG).show();
 
-        Message msg = Message.obtain(null, MessengerService.MSG_GET_INFO, userIp);
+        if(mBound == true){
+            getIP();
+        }
+
+        Intent intent1 = new Intent(getApplicationContext(), MyIntentService.class);
+        startService(intent1);
+
+        wifiSwitch.setClickable(false);
+        wifiSwitch.setVisibility(View.INVISIBLE);
+    }
+
+    public void getIP() {
+        Message msg = Message.obtain(null, MessengerService.MSG_GET_IP);
 
         msg.replyTo = new Messenger(new ResponseHandler());
 
@@ -163,17 +140,8 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         }
     }
 
-    public void speedCheck(View v) {
-        Intent intent1 = new Intent(getApplicationContext(), MyIntentService.class);
-        startService(intent1);
-
-        wifiSwitch.setClickable(false);
-        wifiSwitch.setVisibility(View.INVISIBLE);
-    }
-
-    public void getIP() {
-        Toast.makeText(MainActivity.this, "Fetching Your IP", Toast.LENGTH_SHORT).show();
-        Message msg = Message.obtain(null, MessengerService.MSG_GET_IP);
+    public void apiCall(String userIp){
+        Message msg = Message.obtain(null, MessengerService.MSG_GET_INFO, userIp);
 
         msg.replyTo = new Messenger(new ResponseHandler());
 
@@ -234,10 +202,6 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 
                     submitButton.setClickable(false);
 
-                    if(mBound == true){
-                        getIP();
-                    }
-
                     submitButton.setClickable(true);
                     break;
                 case WifiManager.WIFI_STATE_DISABLED:
@@ -266,8 +230,6 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             wifiSwitch.setText("WiFi is OFF");
         }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
