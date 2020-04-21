@@ -27,7 +27,7 @@ import java.net.URLConnection;
 public class MyIntentService extends IntentService {
 
     private final int progressMax = 100;
-    private static String file_url = "http://ipv4.download.thinkbroadband.com/10MB.zip";
+    private static String file_url = "http://ipv4.download.thinkbroadband.com/5MB.zip";
     private String rateValue;
     private float currentRate;
     private boolean stopped;
