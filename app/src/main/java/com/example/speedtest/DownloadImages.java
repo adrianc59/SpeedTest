@@ -5,24 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.app.Activity;
-import android.app.job.JobScheduler;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,8 +65,6 @@ public class DownloadImages extends AppCompatActivity {
 
                 jobCount++;
                 jobCountView.setText("Job Count: " + jobCount);
-
-                System.out.println("CLICKED: "+ position);
 
                 serviceIntent.putExtra("position", position+1);
                 JobIntentService.enqueueWork(getApplicationContext(), serviceIntent);

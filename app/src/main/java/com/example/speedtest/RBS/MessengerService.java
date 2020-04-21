@@ -10,11 +10,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.speedtest.JsonPlaceHolderApi;
-import com.example.speedtest.MainActivity;
-import com.example.speedtest.Post;
 
 import org.json.JSONObject;
 
@@ -29,12 +24,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MessengerService extends Service {
     public static final int MSG_GET_IP = 1;
